@@ -30,7 +30,7 @@ class apache::params {
   $options       = 'Indexes FollowSymLinks MultiViews'
   $override      = 'None'
   $vhost_name    = '*'
-  
+
   if $::osfamily == 'redhat' or $::operatingsystem == 'amazon' {
     $user                  = 'apache'
     $group                 = 'apache'
@@ -75,7 +75,8 @@ class apache::params {
     $mod_wsgi_package      = 'libapache2-mod-wsgi'
     $mod_auth_kerb_package = 'libapache2-mod-auth-kerb'
     $apache_dev            = ['libaprutil1-dev', 'libapr1-dev', 'apache2-prefork-dev']
-    $vdir                  = '/etc/apache2/sites-enabled/'
+    $vdir                  = '/etc/apache2/conf.d/'
+    $sdir                  = '/etc/apache2/sites-available/'
     $proxy_modules         = ['proxy', 'proxy_http']
     $mod_packages          = {
       'dev'        => ['libaprutil1-dev', 'libapr1-dev', 'apache2-prefork-dev'],

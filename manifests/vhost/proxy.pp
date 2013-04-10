@@ -47,6 +47,13 @@ define apache::vhost::proxy (
     include apache::mod::ssl
   }
 
+  # Setup dir to store vhost files. Debian based systems use sites-available
+  if ($apache::params::sdir) {
+    $vdir = $apache::params::sdir
+  } else {
+    $vdir = $apache::params::vdir
+  }
+
   # Template uses:
   # - $vhost_name
   # - $port
@@ -60,7 +67,7 @@ define apache::vhost::proxy (
   # - $access_log
   # - $name
   file { "${priority}-${name}.conf":
-    path    => "${apache::params::vdir}/${priority}-${name}.conf",
+    path    => "${vdir}/${priority}-${name}.conf",
     content => template($template),
     owner   => 'root',
     group   => 'root',
@@ -69,5 +76,15 @@ define apache::vhost::proxy (
     notify  => Service['httpd'],
   }
 
+  # Create symlink using a2ensite from sites-available to sites-enabled
+  if $::osfamily == 'debian' {
+    a2site { "${name}.conf":
+      ensure   => present,
+      priority => $priority,
+      require  => [
+        File["${priority}-${name}.conf"],
+      ],
+    }
+  }
 
 }
