@@ -48,7 +48,7 @@ define apache::vhost::proxy (
   }
 
   # Setup dir to store vhost files. Debian based systems use sites-available
-  if ($apache::params::sdir) {
+  if $apache::params::sdir {
     $vdir = $apache::params::sdir
   } else {
     $vdir = $apache::params::vdir
